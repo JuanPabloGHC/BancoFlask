@@ -11,12 +11,14 @@ Además renderiza los templates directamente para visualizar el front-end.
    git clone https://github.com/JuanPabloGHC/BancoFlask.git
 
 2. Accede al directorio del proyecto
-bash
-cd BancoFlask
+
+    ```bash
+    cd BancoFlask
 
 3. Instala las dependencias:
-bash
-pip install -r requirements.txt
+
+    ```bash
+    pip install -r requirements.txt
 
 ### Uso
 python main.py
@@ -31,4 +33,5 @@ python main.py
     * 📁`css/`: Carpeta para guardar todos los archivos de estilos.
         * 📄`style.css`: Archivo de CSS para los componentes.
 * 📄`requirements.txt`: Archivo de texto que contiene todas las dependencias necesarias para el uso de la aplicación.
+* 📄`.gitignore`: Archivo para ignorar lo innecesario al subirlo a github (Python, Flask y VisualStudioCode).
 * 📄`README.md`: Archivo informativo de la aplicación, la instalación, uso y documentación.
