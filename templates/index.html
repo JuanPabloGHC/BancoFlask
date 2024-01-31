@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename= 'css/style.css') }}">
+    <title>Document</title>
+</head>
+<body>
+    <h1>GM CUBE</h1>
+    <div class="mensaje">
+        <p>{{mensaje}}</p>
+    </div>
+    <div class="acciones">
+        <div>
+            <h2>INGRESAR</h2>
+            <form method="post" action="/cuenta" class="form-container">
+                <label for="Cuenta">Cuenta</label>
+                <input
+                    required
+                    id="Cuenta"
+                    name="Cuenta"
+                    type="text"
+                >
+                <button>INGRESAR</button>
+            </form>
+        </div>
+        <div>
+            <h2>REGISTRAR</h2>
+            <form method="post" action="/registrar" class="form-container">
+                <label for="Nombre">Nombre</label>
+                <input
+                    required
+                    id="Nombre"
+                    name="Nombre"
+                    type="text"
+                >
+                <label for="Cuenta">Cuenta</label>
+                <input
+                    required
+                    id="Cuenta"
+                    name="Cuenta"
+                    type="text"
+                >
+                <label for="Saldo">Saldo</label>
+                <input
+                    required
+                    id="Saldo"
+                    name="Saldo"
+                    type="number"
+                >
+                <button>REGISTRAR</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

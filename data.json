@@ -1,0 +1,12 @@
+[
+    {
+        "Nombre": "Juan Pablo", 
+        "Cuenta": "123", 
+        "Saldo": 0
+    }, 
+    {
+        "Nombre": "Carlos", 
+        "Cuenta": "456", 
+        "Saldo": 0
+    }  
+]
