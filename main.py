@@ -1,12 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for
 import json
+from models.Banco import Banco
+from models.Account import Account
 
 app = Flask(__name__)
-
-usuarios = []
-
-with open ('data.json', 'r') as file:
-    data = json.load(file)
+banco = Banco("GM CUBE")
 
 # HOME
 @app.route('/', methods=['GET'])
@@ -21,12 +19,9 @@ def main(mensaje=None):
 @app.route('/cuenta/<cuenta>', methods=['POST'])
 def login(cuenta=None):
     if cuenta == None:
-        userItem = " "
         cuenta = request.form['Cuenta']
-        for user in data:
-            if user["Cuenta"] == cuenta:
-                userItem = user
-        if userItem != " ":
+        userItem = banco.SearchUser(cuenta)
+        if userItem != None:
             return render_template('cuenta.html', user = userItem, mensaje="")
         else:
             return redirect(url_for('main', mensaje = "NO EXISTE"))
@@ -34,36 +29,30 @@ def login(cuenta=None):
     else:
         # Transferencia
         try:
-            cuentaDestino = ""
             destinatario = request.form['CuentaDestino']
             cantidad = request.form.get('Cantidad', type=int)
-            for user in data:
-                if user["Cuenta"] == destinatario:
-                    cuentaDestino = user
-                elif user["Cuenta"] == cuenta:
-                    userItem = user
-            if cuentaDestino == "" or cantidad < 0 or userItem["Saldo"] < cantidad:
+            userItem = banco.SearchUser(str(cuenta))
+            cuentaDestino = banco.SearchUser(destinatario)
+            saldoSuficiente = userItem.CheckSufficientBalance(cantidad)
+            if cuentaDestino == None or cantidad < 0 or saldoSuficiente == False:
                 return render_template('cuenta.html', user = userItem, mensaje="INVALIDO")
-            userItem["Saldo"] -= cantidad
-            cuentaDestino["Saldo"] += cantidad
+            banco.Transfer(userItem, cuentaDestino, cantidad)
             return render_template("cuenta.html", user=userItem, mensaje="HECHO")
         except Exception:
             pass
 
         # Deposito o Retiro
-        for user in data:
-            if user["Cuenta"] == cuenta:
-                userItem = user
+        userItem = banco.SearchUser(str(cuenta))
         cantidad = request.form.get('Cantidad', type=int)
         if cantidad < 0:
             return render_template('cuenta.html', user = userItem, mensaje="INVALIDO")
         movimiento = request.form.get('Movimiento')
         if movimiento == "D":
-            userItem["Saldo"] += cantidad
+            banco.Deposit(userItem, cantidad)
         elif movimiento == "R":
-            if userItem["Saldo"] < cantidad:
+            if userItem.CheckSufficientBalance(cantidad) == False:
                 return render_template('cuenta.html', user = userItem, mensaje="INVALIDO")
-            userItem["Saldo"] -= cantidad
+            banco.Withdrawal(userItem, cantidad)
         return render_template('cuenta.html', user = userItem, mensaje="HECHO")
 
 @app.route('/registrar', methods=['POST'])
@@ -71,15 +60,10 @@ def registro():
     nombre = request.form['Nombre']
     cuenta = request.form['Cuenta']
     saldo = int(request.form['Saldo'])
-    for user in data:
-        if user["Cuenta"] == cuenta:
-            return redirect(url_for('main', mensaje = "USUARIO EXISTENTE"))
-    user = {
-        "Nombre": nombre,
-        "Cuenta": cuenta,
-        "Saldo": saldo
-    }
-    data.append(user)
+    userItem = banco.SearchUser(cuenta)
+    if userItem != None:
+        return redirect(url_for('main', mensaje = "USUARIO EXISTENTE"))
+    banco.AddUser(nombre, cuenta, saldo)
     return redirect(url_for('main', mensaje = "REGISTRADO"))
 
 

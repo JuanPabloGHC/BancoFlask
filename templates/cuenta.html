@@ -8,7 +8,7 @@
 </head>
 <body>
     <div>
-        <h1>{{user["Nombre"]}}</h1>
+        <h1>{{user.GetName()}}</h1>
         <div class="superior-derecha">
             <form action="/" method="get">
                 <button>SALIR</button>
@@ -20,12 +20,12 @@
     </div>
     <div>
         <h2>SALDO ACTUAL</h2>
-        <h3>${{user["Saldo"]}}</h3>
+        <h3>${{user.GetBalance()}}</h3>
     </div>
     <div class="acciones">
         <fieldset class="fieldset-main">
             <legend>MOVIMIENTOS</legend>
-            <form action="/cuenta/{{user['Cuenta']}}" method="post" class="form-container">
+            <form action="/cuenta/{{user.GetAccount()}}" method="post" class="form-container">
                 <label for="Cantidad">CANTIDAD</label>
                 <input
                     required
@@ -46,7 +46,7 @@
 
         <fieldset class="fieldset-main">
             <legend>TRANSFERENCIA</legend>
-            <form action="/cuenta/{{user['Cuenta']}}" method="post" class="form-container">
+            <form action="/cuenta/{{user.GetAccount()}}" method="post" class="form-container">
                 <label for="Cantidad">CANTIDAD</label>
                 <input
                     required
